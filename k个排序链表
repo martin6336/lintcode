@@ -1,0 +1,60 @@
+package Mergelist;
+/**
+ * Definition for ListNode.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int val) {
+ *         this.val = val;
+ *         this.next = null;
+ *     }
+ * }
+ */ 
+class Solution {
+	public ListNode mergelist(ListNode l1,ListNode l2) {
+		// head没有实质性用处，所以取0或者其他无所谓
+		ListNode head=new ListNode(0);
+		//讲道理如果初始化函数只有输入参数的那么你不输入肯定是错的
+		ListNode point=head;
+		while(l1!=null&&l2!=null) {
+			if (l1.val<=l2.val) {
+				point.next=l1;
+				l1=l1.next;
+			}
+			else {
+				point.next=l2;
+				l2=l2.next;
+			}
+			point=point.next;
+		}
+		//不等于null才会赋值，这可不是我为null剩下一个就不为null
+		if (l1!=null) {
+			// 就算输入两个都是null放心也不会出错
+			point.next=l1;
+		}
+		if (l2!=null) {
+			point.next=l2;
+		}
+		//头结点的下一个
+		return head.next;
+	}
+	//lists是各个头结点的集合
+    public ListNode mergeKLists(List<ListNode> lists) {
+        //代码要严谨，输入如果是null怎么办
+        if (lists.size()==0||lists==null){
+            return null;
+        }
+    	while(lists.size()>1) {
+    		// 声明可以使用list，但是使用new实化的时候，必须指定是arraylist还是linkedlist
+    		List<ListNode> newlists=new ArrayList<ListNode>();
+    		for (int i=0;i<lists.size()-1;i=i+2) {
+    			newlists.add(mergelist(lists.get(i),lists.get(i+1)));
+    		}
+    		if (lists.size()%2==1) {
+    			newlists.add(lists.get(lists.size()-1));
+    		}
+    		lists=newlists;
+    	}
+    	return lists.get(0);
+    }
+}
